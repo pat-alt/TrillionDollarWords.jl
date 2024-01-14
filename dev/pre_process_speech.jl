@@ -11,12 +11,13 @@ df[!, "EventType"] .= "speech"
 
 # Get labelled data:
 labeled_dir = joinpath(raw_data_dir, "filtered_data/speech_labeled/")
-df_labeled = DataFrame()
+df_labeled = []
 for x in readdir(labeled_dir)
     _df = CSV.read(joinpath(labeled_dir, x), DataFrame, drop=[1])
     _df[!, "YYYYMMDD"] .= extract_digits(x)
-    df_labeled = vcat(df_labeled, _df)
+    push!(df_labeled, _df)
 end
+df_labeled = vcat(df_labeled...)
 
 # Merge:
 df_speech = innerjoin(df, df_labeled, on=:YYYYMMDD) |>

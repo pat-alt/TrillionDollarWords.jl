@@ -4,7 +4,6 @@ import CodecZlib, Downloads, Tar
 # Raw data folder:
 raw_data_root = "dev/data/raw"
 raw_data_dir = joinpath(raw_data_root, "fomc-hawkish-dovish-main/data")
-OVERWRITE = true
 
 if !isdir(raw_data_dir) || OVERWRITE
     if isdir(raw_data_root)

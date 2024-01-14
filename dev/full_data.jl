@@ -1,11 +1,3 @@
-using Dates
-
-# Get data from the web and save it to a file
-include("get_data.jl")
-
-# Utils:
-include("utils.jl")
-
 # Meeting minutes data:
 include("pre_process_mm.jl")
 
