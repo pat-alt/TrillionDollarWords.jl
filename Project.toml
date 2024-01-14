@@ -1,7 +1,7 @@
 name = "TrillionDollarWords"
 uuid = "d66529d5-f4f4-49d9-a69b-da67f5535f0a"
 authors = ["Patrick Altmeyer"]
-version = "1.0.0-DEV"
+version = "0.1.0"
 
 [compat]
 julia = "1.6"
