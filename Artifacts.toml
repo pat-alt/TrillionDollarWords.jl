@@ -1,0 +1,6 @@
+[clean_data]
+git-tree-sha1 = "c8e8fea9e66a8e6decae92a0241b9939751820bb"
+
+    [[clean_data.download]]
+    sha256 = "01b6c33c2af63a34da13ca3c524c869d0dd61a2ea5f17bc1a8a9eedf3f93d974"
+    url = "https://github.com/pat-alt/TrillionDollarWords.jl/releases/download/artifacts-latest/c8e8fea9e66a8e6decae92a0241b9939751820bb.tar.gz"

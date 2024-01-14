@@ -9,8 +9,8 @@ uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 version = "1.1.1"
 
 [[deps.ArtifactUtils]]
-deps = ["Downloads", "Git", "HTTP", "Pkg", "ProgressLogging", "SHA", "TOML", "gh_cli_jll"]
-git-tree-sha1 = "f7c3ca6c70ea6b035effe5428eb05231ba890c2d"
+deps = ["Downloads", "Git", "HTTP", "Pkg", "ProgressLogging", "SHA", "TOML", "gh_cli_jll", "ghr_jll"]
+path = "../../other/ArtifactUtils.jl"
 uuid = "8b73e784-e7d8-4ea5-973d-377fed4e3bce"
 version = "0.2.4"
 
@@ -476,6 +476,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "b54ff233a6a183ad366d29fa0e3ff9bb921692db"
 uuid = "5d31d589-30fb-542f-b82d-10325e863e38"
 version = "2.35.0+0"
+
+[[deps.ghr_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "a83b3feeda837dd3f3cad19076bda0f0a524d687"
+uuid = "07c12ed4-43bc-5495-8a2a-d5838ef8d533"
+version = "0.14.0+0"
 
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
