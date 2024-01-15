@@ -21,4 +21,4 @@ include("training_data.jl")
 # Artifacts:
 artifact_id = artifact_from_directory("dev/data/cleaned")
 release = upload_to_release(artifact_id)
-add_artifact!("Artifacts.toml", "clean_data", release)
+add_artifact!("Artifacts.toml", "clean_data", release; force=true)
