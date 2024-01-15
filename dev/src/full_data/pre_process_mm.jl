@@ -22,7 +22,8 @@ df_labeled = vcat(df_labeled...)
 
 # Merge:
 df_mm = innerjoin(df, df_labeled, on=:YYYYMMDD) |>
-    x -> select(x, [:YYYYMMDD, :EventType, :label, :sentence, :score]) |>
+    x -> transform!(groupby(x, :Url), groupindices => :doc_id) |>
+    x -> select(x, [:doc_id, :YYYYMMDD, :EventType, :label, :sentence, :score]) |>
     x -> rename!(x, :YYYYMMDD => :date, :EventType => :event_type)
 
 df_mm.event_type .= "meeting minutes"
