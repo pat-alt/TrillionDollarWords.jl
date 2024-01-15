@@ -1,5 +1,7 @@
 module TrillionDollarWords
 
-# Write your package code here.
+export load_clean_data, load_training_data
+
+include("load_data.jl")
 
 end
