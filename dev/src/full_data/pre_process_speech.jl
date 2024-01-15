@@ -25,11 +25,13 @@ df_labeled = vcat(df_labeled...)
 # Subset to 'select' speeches:
 selected_path = readdir("dev/data/raw/fomc-hawkish-dovish-main/data/raw_data/speech/html/select/")
 df = df[[any([contains(x, y) for y in selected_path]) for x in df.LocalPath], :]
+df = unique(df, :LocalPath)
 
 # Merge:
 df_speech = innerjoin(df, df_labeled, on=[:YYYYMMDD, :date_suffix]) |>
     x -> transform!(groupby(x, :LocalPath), groupindices => :doc_id) |>
     x -> select(x, [:doc_id, :YYYYMMDD, :EventType, :label, :sentence, :score, :Speaker]) |>
-    x -> rename!(x, :YYYYMMDD => :date, :EventType => :event_type, :Speaker => :speaker)
+    x -> rename!(x, :YYYYMMDD => :date, :EventType => :event_type, :Speaker => :speaker) |>
+    unique
 
 df_speech.event_type .= "speech"

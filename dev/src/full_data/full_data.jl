@@ -19,6 +19,9 @@ replace!(df.label, "LABEL_0" => "dovish", "LABEL_1" => "hawkish", "LABEL_2" => "
 # Save:
 CSV.write("$clean_dir/all_sentences.csv", df)
 
+# All event times:
+ALL_EVENT_TIMES = unique(select(df, :date))
+
 # Market data:
 include("market_data.jl")
 
