@@ -1,14 +1,18 @@
 using Dates
 
-# Get data from the web and save it to a file
+# Setup:
 OVERWRITE = "overwrite" in ARGS
+clean_dir = "dev/data/cleaned/"
+isdir(clean_dir) || mkdir(clean_dir)
+
+# Get data from the web and save it to a file
 include("get_data.jl")
 
 # Utils:
 include("utils.jl")
 
 # Full data:
-include("full_data.jl")
+include("full_data/full_data.jl")
 
 # Training data:
 include("training_data.jl")

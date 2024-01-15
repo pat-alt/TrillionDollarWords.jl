@@ -12,5 +12,11 @@ df = vcat(df_mm, df_speech, df_pc, cols=:union)
 df.date = Dates.Date.(df.date, "yyyymmdd")
 
 # Save:
-isdir("dev/data/cleaned/") || mkdir("dev/data/cleaned/")
-CSV.write("dev/data/cleaned/all_data.csv", df)
+CSV.write("$clean_dir/all_sentences.csv", df)
+
+# Market data:
+include("market_data.jl")
+
+# Merge:
+df = vcat(df, df_combined, cols=:union)
+

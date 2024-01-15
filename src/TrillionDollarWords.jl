@@ -1,6 +1,6 @@
 module TrillionDollarWords
 
-export load_clean_data, load_training_data
+export load_all_sentences, load_training_sentences
 
 include("load_data.jl")
 
