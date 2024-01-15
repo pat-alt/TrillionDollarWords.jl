@@ -31,4 +31,9 @@ df_test[!,"split"] .= "test"
 
 # Merge:
 df = vcat(df_train, df_test)
+
+# Transform label column:
+replace!(df.label, 0 => "dovish", 1 => "hawkish", 2 => "neutral")
+df.label = categorical(df.label)
+
 CSV.write("dev/data/cleaned/training_sentences.csv", df)

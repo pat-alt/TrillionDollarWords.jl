@@ -1,3 +1,4 @@
+using CategoricalArrays
 using Dates
 
 # Setup:
