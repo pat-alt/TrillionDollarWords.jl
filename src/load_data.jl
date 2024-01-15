@@ -1,7 +1,3 @@
-using CSV
-using DataFrames
-using LazyArtifacts
-
 """
     load_all_sentences()
 
