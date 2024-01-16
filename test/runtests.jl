@@ -1,5 +1,5 @@
 using DataFrames
-using Transformers
+import Transformers
 using TrillionDollarWords
 using Test
 

@@ -1,31 +1,71 @@
-using Transformers.TextEncoders: AbstractTransformerTextEncoder
-using Transformers.HuggingFace: HGFPreTrainedModel, HGFConfig
+using Transformers.TextEncoders: GPT2TextEncoder
+using Transformers.HuggingFace: HGFRobertaModel, HGFRobertaForSequenceClassification, HGFConfig
 
 "Struct for the baseline model (i.e. the model presented in the paper)."
 struct BaselineModel
-    tkr::AbstractTransformerTextEncoder
-    mod::HGFPreTrainedModel
+    tkr::GPT2TextEncoder
+    mod::Union{HGFRobertaModel,HGFRobertaForSequenceClassification}
     cfg::HGFConfig
 end
 
 """
     (mod::BaselineModel)(queries::Vector{String})
 
+Computes a forward pass of the model on the given queries and returns either the logits or embeddings depending on whether or not the model was loaded with the head for classification.
+"""
+(mod::BaselineModel)(queries::Vector{String}) = mod(mod.mod, queries)
+
+"""
+    get_embeddings(mod::BaselineModel, queries::Vector{String})
+
 Computes a forward pass of the model on the given queries and returns the embeddings.
 """
-function (mod::BaselineModel)(queries::Vector{String})
+get_embeddings(mod::BaselineModel, queries::Vector{String}) = get_embeddings(mod.mod, Transformers.encode(mod.tkr, queries))
+
+"""
+    (mod::BaselineModel)(atomic_model::HGFRobertaModel, queries::Vector{String})
+
+Computes a forward pass of the model on the given queries and returns the embeddings.
+"""
+function (mod::BaselineModel)(atomic_model::HGFRobertaModel, queries::Vector{String})
     tokens = Transformers.encode(mod.tkr, queries)
-    embeddings = mod.mod(tokens)
+    embeddings = atomic_model(tokens)
     return embeddings
 end
 
 """
+    get_embeddings(atomic_model::HGFRobertaModel, tokens::NamedTuple)
+
+Extends the `embeddings` function to `HGFRobertaModel`.
+"""
+get_embeddings(atomic_model::HGFRobertaModel, tokens::NamedTuple) = atomic_model(tokens)
+
+"""
+    (mod::BaselineModel)(atomic_model::HGFRobertaForSequenceClassification, queries::Vector{String})
+
+Computes a forward pass of the model on the given queries and returns the logits.
+"""
+function (mod::BaselineModel)(atomic_model::HGFRobertaForSequenceClassification, queries::Vector{String})
+    tokens = Transformers.encode(mod.tkr, queries)
+    embeddings = atomic_model.model(tokens)
+    logits = atomic_model.cls(embeddings.hidden_state)
+    return logits
+end
+
+"""
+    get_embeddings(atomic_model::HGFRobertaForSequenceClassification, tokens::NamedTuple)
+
+Extends the `embeddings` function to `HGFRobertaForSequenceClassification`.
+"""
+get_embeddings(atomic_model::HGFRobertaForSequenceClassification, tokens::NamedTuple) = atomic_model.model(tokens)
+
+"""
     laywerwise_activations(mod::BaselineModel, queries::Vector{String})
 
-Computes a forward pass of the model on the given queries and returns the layerwise activations. If `output_hidden_states=false` was passed to `load_model` (default), only the last layer is returned. If `output_hidden_states=true` was passed to `load_model`, all layers are returned.
+Computes a forward pass of the model on the given queries and returns the layerwise activations for the `HGFRobertaModel`. If `output_hidden_states=false` was passed to `load_model` (default), only the last layer is returned. If `output_hidden_states=true` was passed to `load_model`, all layers are returned. Even if the model is loaded with the head for classification, the head is not used for computing the activations.
 """
 function layerwise_activations(mod::BaselineModel, queries::Vector{String})
-    embeddings = mod(queries)
+    embeddings = get_embeddings(mod, queries)
     pooler = Transformers.HuggingFace.FirstTokenPooler()
     if haskey(embeddings, :outputs)
         output = [pooler(x.hidden_state) for x in embeddings.outputs]
