@@ -1,7 +1,12 @@
+df = load_all_sentences()
+n = 2
+queries = df[1:n, :]
+mod_cls = load_model()
+mod = load_model(; load_head=false)
+
 @testset "Model" begin
 
     @testset "with head" begin
-        mod_cls = load_model()
         @test typeof(mod_cls) == BaselineModel
         @test typeof(mod_cls.tkr) <: Transformers.TextEncoders.GPT2TextEncoder
         @test typeof(mod_cls.mod) <: Transformers.HuggingFace.HGFRobertaForSequenceClassification
@@ -9,7 +14,6 @@
     end
 
     @testset "without head" begin
-        mod = load_model(;load_head=false)
         @test typeof(mod) == BaselineModel
         @test typeof(mod.tkr) <: Transformers.TextEncoders.GPT2TextEncoder
         @test typeof(mod.mod) <: Transformers.HuggingFace.HGFRobertaModel
@@ -19,9 +23,7 @@
 end
 
 @testset "Outputs" begin
-    df = load_all_sentences()
-    n = 2
-    queries = df[1:n, :]
+    
     @testset "Simple forward pass" begin
         emb = mod(queries.sentence)
         @test haskey(emb, :pooled)
