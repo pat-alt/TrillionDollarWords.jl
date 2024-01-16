@@ -1,12 +1,9 @@
-using CSV
-using DataFrames
-using LazyArtifacts
-
 """
     load_all_sentences()
 
 Load the dataset with all sentences from the artifact. This is the complete dataset with sentences from press conferences, meeting minutes, and speeches. 
 
+- The `sentence_id` column is the unique identifier of the sentence.
 - The `doc_id` column is the unique identifier of the document.
 - The `date` column is the date of the event.
 - The `event_type` column is the type of event (meeting minutes, speech, or press conference).
@@ -87,6 +84,7 @@ load_market_data() = CSV.read(joinpath(artifact"clean_data", "market_data/combin
 
 Load the combined dataset from the artifact. This dataset combines all sentences and the market data used in the paper.
 
+- The `sentence_id` column is the unique identifier of the sentence.
 - The `doc_id` column is the unique identifier of the document.
 - The `date` column is the date of the event.
 - The `event_type` column is the type of event (meeting minutes, speech, or press conference).

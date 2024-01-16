@@ -11,4 +11,15 @@ This is a small package that facilitates working with the data and model propose
 > [!NOTE]  
 > I am not the author of that paper nor am I affiliated with the authors of the paper. This package was developed as a by-product of me workign with the data and model in Julia.
 
+## Install
 
+The package is not yet registered. In the meantime, you can install it from GitHub:
+
+``` julia
+using Pkg
+Pkg.add(url="https://github.com/pat-alt/TrillionDollarWords.jl")
+```
+
+## `dev` folder
+
+The [dev](/dev/) folder contains source code used to preprocess data sourced from the paper's GitHub [repo](https://github.com/gtfintechlab/fomc-hawkish-dovish) and the HuggingFace model [repo](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves). Preprocessed data is archived as artifacts and uploaded to GitHub releases to make it available to the package itself.
