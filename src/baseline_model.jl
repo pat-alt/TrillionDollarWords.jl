@@ -28,7 +28,8 @@ get_embeddings(mod::BaselineModel, queries::Vector{String}) = get_embeddings(mod
 Computes a forward pass of the model on the given queries and returns the embeddings.
 """
 function (mod::BaselineModel)(atomic_model::HGFRobertaModel, queries::Vector{String})
-    tokens = Transformers.encode(mod.tkr, queries)
+    tokens = Transformers.encode(mod.tkr, queries) |> Transformers.todevice
+    atomic_model = Transformers.todevice(atomic_model)
     embeddings = atomic_model(tokens)
     return embeddings
 end
@@ -46,7 +47,8 @@ get_embeddings(atomic_model::HGFRobertaModel, tokens::NamedTuple) = atomic_model
 Computes a forward pass of the model on the given queries and returns the logits.
 """
 function (mod::BaselineModel)(atomic_model::HGFRobertaForSequenceClassification, queries::Vector{String})
-    tokens = Transformers.encode(mod.tkr, queries)
+    tokens = Transformers.encode(mod.tkr, queries) |> Transformers.todevice
+    atomic_model = Transformers.todevice(atomic_model)
     embeddings = atomic_model.model(tokens)
     logits = atomic_model.cls(embeddings.hidden_state)
     return logits
