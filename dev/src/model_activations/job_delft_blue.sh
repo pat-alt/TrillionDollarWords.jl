@@ -18,6 +18,6 @@ export OPENBLAS_NUM_THREADS=1                           # avoid that OpenBLAS ca
 
 previous=$(/usr/bin/nvidia-smi --query-accounted-apps='gpu_utilization,mem_utilization,max_memory_usage,time' --format='csv' | /usr/bin/tail -n '+2')
 
-srun julia --project=dev dev/src/model_activations/model_outputs > dev/src/model_activations/model_outputs.log
+srun julia --project=dev dev/src/model_activations/model_outputs.jl > dev/src/model_activations/model_outputs.log
 
 /usr/bin/nvidia-smi --query-accounted-apps='gpu_utilization,mem_utilization,max_memory_usage,time' --format='csv' | /usr/bin/grep -v -F "$previous"
