@@ -4,6 +4,8 @@ using DataFrames
 using Transformers
 using TrillionDollarWords
 
+isdir("dev/data/activations") || mkdir("dev/data/activations")
+
 # GPU:
 @info "CUDA is functional: $(CUDA.functional())"
 Transformers.enable_gpu()
@@ -15,7 +17,7 @@ df = load_all_sentences()
 
 # Compute activations:
 @info "Computing activations..."
-n = 10
+n = 100
 queries = df[1:n,:]
-emb = layerwise_activations(mod, queries)
+emb = @time layerwise_activations(mod, queries)
 CSV.write("dev/data/activations/activations.csv", emb)
