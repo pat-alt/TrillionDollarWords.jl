@@ -4,6 +4,7 @@ using Transformers
 using TrillionDollarWords
 
 # GPU:
+println("CUDA is functional: ", CUDA.functional())
 Transformers.enable_gpu()
 
 # Load model and data:
