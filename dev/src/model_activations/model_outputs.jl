@@ -1,3 +1,4 @@
+using CSV
 using CUDA
 using DataFrames
 using Transformers
