@@ -1,6 +1,6 @@
 [clean_data]
-git-tree-sha1 = "a3e9fd02627aea04ff5a7c15c6a6280d534ae025"
+git-tree-sha1 = "5e4c7adaf93e5ccc1953542a7a5d652f3e3e31d8"
 
     [[clean_data.download]]
-    sha256 = "6a52e25e8f74a3ed757f5ac06eaa1a187ada7685f09b4c7456af1d035d321adc"
-    url = "https://github.com/pat-alt/TrillionDollarWords.jl/releases/download/artifacts-latest/a3e9fd02627aea04ff5a7c15c6a6280d534ae025.tar.gz"
+    sha256 = "e43da77b3e570bd4399b8ecfa08914b27373dee11ac27dc2a69d1794af1f085f"
+    url = "https://github.com/pat-alt/TrillionDollarWords.jl/releases/download/artifacts-latest/5e4c7adaf93e5ccc1953542a7a5d652f3e3e31d8.tar.gz"

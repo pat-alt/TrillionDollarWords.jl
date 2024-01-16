@@ -16,6 +16,10 @@ df.label = convert.(String, df.label)
 df.label = categorical(df.label)
 replace!(df.label, "LABEL_0" => "dovish", "LABEL_1" => "hawkish", "LABEL_2" => "neutral")
 
+# Sentence identifier:
+df[!, "sentence_id"] .= 1:size(df, 1)
+select!(df, :sentence_id, Not([:sentence_id]))
+
 # Save:
 CSV.write("$clean_dir/all_sentences.csv", df)
 

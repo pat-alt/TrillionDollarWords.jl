@@ -1,10 +1,11 @@
 using Transformers.TextEncoders: AbstractTransformerTextEncoder
-using Transformers.HuggingFace: HGFPreTrainedModel
+using Transformers.HuggingFace: HGFPreTrainedModel, HGFConfig
 
 "Struct for the baseline model (i.e. the model presented in the paper)."
-struct BaselineModel{T<:AbstractTransformerTextEncoder,M<:HGFPreTrainedModel}
-    tkr::T
-    mod::M
+struct BaselineModel
+    tkr::AbstractTransformerTextEncoder
+    mod::HGFPreTrainedModel
+    cfg::HGFConfig
 end
 
 """
@@ -23,7 +24,7 @@ end
 
 Computes a forward pass of the model on the given queries and returns the layerwise activations. If `output_hidden_states=false` was passed to `load_model` (default), only the last layer is returned. If `output_hidden_states=true` was passed to `load_model`, all layers are returned.
 """
-function laywerwise_activations(mod::BaselineModel, queries::Vector{String})
+function layerwise_activations(mod::BaselineModel, queries::Vector{String})
     embeddings = mod(queries)
     pooler = Transformers.HuggingFace.FirstTokenPooler()
     if haskey(embeddings, :outputs)
@@ -32,6 +33,32 @@ function laywerwise_activations(mod::BaselineModel, queries::Vector{String})
         output = pooler(embeddings.hidden_state)
     end
     return output
+end
+
+"""
+    layerwise_activations(mod::BaselineModel, queries::DataFrame)
+
+Computes a forward pass of the model on the given queries and returns the layerwise activations in a `DataFrame` where activations are uniquely idendified by the `sentence_id`. If `output_hidden_states=false` was passed to `load_model` (default), only the last layer is returned. If `output_hidden_states=true` was passed to `load_model`, all layers are returned. The `layer` column indicates the layer number.
+
+Each single activation receives its own cell to make it possible to save the output to a CSV file.
+"""
+function layerwise_activations(mod::BaselineModel, queries::DataFrame)
+    @assert all([x ∈ names(queries) for x in ["sentence_id", "sentence"]]) "The DataFrame must have a columns named `sentence_id` and `sentence`."
+    query_sentences = queries.sentence
+    A = layerwise_activations(mod, query_sentences)
+    if isa(A, Vector{<:AbstractArray})
+        df = []
+        for j in 1:length(A)
+            _df = DataFrame(sentence_id=queries.sentence_id, activations=[A[j][:, i] for i in 1:size(A[j], 2)], layer=j)
+            push!(df, _df)
+        end
+        df = vcat(df...)
+    else
+        df = DataFrame(sentence_id=queries.sentence_id, activations=[A[:, i] for i in 1:size(A, 2)], layer=mod.cfg.num_hidden_layers)
+    end
+    df = flatten(df, :activations) |>
+        x -> transform(groupby(x, [:sentence_id, :layer]), eachindex => :activation_id)
+    return df
 end
 
 """
@@ -48,5 +75,5 @@ function load_model(; load_head=true, kwrgs...)
     else
         mod = Transformers.load_model(model_name; config=cfg)
     end
-    return BaselineModel(tkr, mod)
+    return BaselineModel(tkr, mod, cfg)
 end
