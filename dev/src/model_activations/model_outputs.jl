@@ -26,7 +26,7 @@ Transformers.enable_gpu()
 
 # Load model and data:
 @info "Loading model and data..."
-mod = load_model(; load_head=false)
+mod = load_model(; load_head=false, output_hidden_states=true)
 df = load_all_sentences()
 
 # Compute activations:
