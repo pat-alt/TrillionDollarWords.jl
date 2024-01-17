@@ -7,14 +7,16 @@ using TrillionDollarWords
 
 # Path for intermediate activations:
 out_dir = "dev/data/activations/intermediate"
+last_saved = 0
 if ispath(out_dir)
     sentence_ids = readdir(out_dir) .|>
-                   x -> split(replace(x, ".csv" => ""), ":")[2] .|>
-                        x -> parse(Int, x)
-    last_saved = maximum(sentence_ids)
+        x -> split(replace(x, ".csv" => ""), ":")[2] .|>
+        x -> parse(Int, x)
+    if length(sentence_ids) > 0
+        last_saved = maximum(sentence_ids)
+    end
 else
-    mkpath(out_dir)
-    last_saved = 0
+    mkpath(out_dir) 
 end
 
 # GPU:
