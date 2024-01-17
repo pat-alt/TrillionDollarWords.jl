@@ -33,6 +33,7 @@ df = load_all_sentences()
 @info "Computing activations..."
 bs = 50
 n = size(df, 1)
+@info "Time limit: $(ENV["JOB_TIME"])".
 timer = Timer(60 * 10)
 for (i, batch) in enumerate(partition(1:n, bs))
     @info "Processing batch $i/$(ceil(Int, n/bs))..."

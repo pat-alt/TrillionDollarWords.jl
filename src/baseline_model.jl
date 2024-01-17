@@ -29,6 +29,7 @@ Computes a forward pass of the model on the given queries and returns the embedd
 """
 function (mod::BaselineModel)(atomic_model::HGFRobertaModel, queries::Vector{String})
     tokens = Transformers.encode(mod.tkr, queries) |> Transformers.todevice
+    @info "Tokens: $(typeof(tokens))"
     atomic_model = Transformers.todevice(atomic_model)
     embeddings = atomic_model(tokens)
     return embeddings
