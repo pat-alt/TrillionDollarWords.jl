@@ -1,6 +1,7 @@
 using Arrow
 using CSV
 using DataFrames
+using Dates
 using Tables
 using TrillionDollarWords
 
@@ -25,17 +26,10 @@ for x in sorted_dir_files
     end
 end
 
-# Post-process:
-table = Arrow.Table(joinpath(merge_dir, "activations.arrow"))
-
-# Check that all sentences are present:
-df_all = load_all_data()
-all_ids = unique(df_all.sentence_id) |> sort
-q = table.sentence_id |> @unique()
-missing_ids = setdiff(all_ids, q)
-@assert length(missing_ids) == 0 "The following sentence IDs are missing: $missing_ids."
-
-# Artifacts:
-artifact_id = artifact_from_directory("dev/data/activations/merged")
-release = upload_to_release(artifact_id)
-add_artifact!("Artifacts.toml", "activations", release; force=true)
+# Upload: 
+for layer in 1:n_layers
+    layer_dir = layer_dirs[layer]
+    artifact_id = artifact_from_directory(layer_dir)
+    release = upload_to_release(artifact_id; tag="activations_$(today())")
+    add_artifact!("Artifacts.toml", "activations_layer_$layer", release; force=true)
+end

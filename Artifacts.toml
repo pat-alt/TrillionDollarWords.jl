@@ -1,3 +1,10 @@
+[activations_layer_1]
+git-tree-sha1 = "64aba485893cae4a11450dadc9de18432c44c093"
+
+    [[activations_layer_1.download]]
+    sha256 = "0956a6be768b2b6594551df84c11e3b1b0ac9b5a7f018883ba692161c7e36940"
+    url = "https://github.com/pat-alt/TrillionDollarWords.jl/releases/download/artifacts-latest/64aba485893cae4a11450dadc9de18432c44c093.tar.gz"
+
 [clean_data]
 git-tree-sha1 = "5e4c7adaf93e5ccc1953542a7a5d652f3e3e31d8"
 
