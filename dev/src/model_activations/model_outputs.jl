@@ -18,6 +18,7 @@ if ispath(out_dir)
 else
     mkpath(out_dir) 
 end
+@info "Last saved: $last_saved."
 
 # GPU:
 @info "CUDA is functional: $(CUDA.functional())"
@@ -49,6 +50,7 @@ end
 # Merge:
 @info "Merging activations..."
 merge_dir = "dev/data/activations/merged"
+ispath(merge_dir) || mkpath(merge_dir)
 df_activations = []
 for x in readdir(out_dir)[contains.(readdir(out_dir), ".csv")]
     push!(df_activations, CSV.read(joinpath(out_dir, x), DataFrame))
