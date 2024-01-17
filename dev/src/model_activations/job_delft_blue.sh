@@ -12,9 +12,12 @@
 
 module load 2023r1
 
-set -x                                                  # keep log of executed commands
 export SRUN_CPUS_PER_TASK="$SLURM_CPUS_PER_TASK"        # assign extra environment variable to be safe 
 export OPENBLAS_NUM_THREADS=1                           # avoid that OpenBLAS calls too many threads
 export JOB_TIME=$(squeue -j $SLURM_JOB_ID -h --Format TimeLimit)
 
+previous=$(/usr/bin/nvidia-smi --query-accounted-apps='gpu_utilization,mem_utilization,max_memory_usage,time' --format='csv' | /usr/bin/tail -n '+2')
+
 srun julia --project=dev dev/src/model_activations/model_outputs.jl > dev/src/model_activations/model_outputs.log
+
+/usr/bin/nvidia-smi --query-accounted-apps='gpu_utilization,mem_utilization,max_memory_usage,time' --format='csv' | /usr/bin/grep -v -F "$previous"
