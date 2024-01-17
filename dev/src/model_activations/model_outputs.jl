@@ -31,7 +31,7 @@ for (i, batch) in enumerate(partition(1:n, bs))
     @info "Processing batch $i/$(ceil(Int, n/bs))..."
     !all(batch .<= last_saved) || continue
     queries = df[batch,:]
-    emb = layerwise_activations(mod, queries)
+    emb = @time layerwise_activations(mod, queries)
     CSV.write(joinpath(out_dir, "activations_$batch.csv"), emb)
 end
 

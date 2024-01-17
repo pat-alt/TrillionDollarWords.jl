@@ -2,7 +2,7 @@
 #
 #SBATCH --job-name="FOMC-RoBERTa"
 #SBATCH --partition=gpu
-#SBATCH --time=00:20:00
+#SBATCH --time=01:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --gpus-per-task=1
