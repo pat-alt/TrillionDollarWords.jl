@@ -32,7 +32,11 @@ function compute_activations(
     n_thr = Threads.nthreads()
     n_per_chunk = bs * n_thr
     n = size(df, 1)
-    all_ids = isnothing(missing_ids) ? collect(1:n) : missing_ids
+    if isnothing(missing_ids) 
+        all_ids = 1:n
+    else
+        all_ids = missing_ids
+    end
     for (i, chunk) in enumerate(partition(all_ids, n_per_chunk))
         @info "Processing chunk $i/$(ceil(Int, length(all_ids)/n_per_chunk))..."
         !all(chunk .<= last_saved) || !isnothing(missing_ids) || continue
@@ -40,7 +44,8 @@ function compute_activations(
             println("$batch on $(Threads.threadid())")
             queries = df[batch,:]
             emb = layerwise_activations(mod, queries)
-            CSV.write(joinpath(out_dir, "activations_$batch.csv"), emb)
+            _sffx = "$(batch[1]):$(batch[end])"
+            CSV.write(joinpath(out_dir, "activations_$(_sffx).csv"), emb)
         end
     end
 end

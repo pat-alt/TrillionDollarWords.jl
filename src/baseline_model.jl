@@ -22,7 +22,6 @@ Computes a forward pass of the model on the given queries and returns the embedd
 """
 function get_embeddings(mod::BaselineModel, queries::Vector{String})
     tokens = Transformers.encode(mod.tkr, queries) |> Transformers.todevice
-    @info "Tokens type: $(typeof(tokens.token))."
     get_embeddings(mod.mod, tokens)
 end
 
