@@ -32,12 +32,18 @@ df = load_all_sentences()
 @info "Computing activations..."
 bs = 50
 n = size(df, 1)
+timer = Timer(60 * 10)
 for (i, batch) in enumerate(partition(1:n, bs))
     @info "Processing batch $i/$(ceil(Int, n/bs))..."
     !all(batch .<= last_saved) || continue
     queries = df[batch,:]
     emb = @time layerwise_activations(mod, queries)
     CSV.write(joinpath(out_dir, "activations_$batch.csv"), emb)
+    yield()
+    if !isopen(timer)
+        @info "Timer stopped."
+        break
+    end
 end
 
 # Merge:
