@@ -9,7 +9,7 @@
 This is a small package that facilitates working with the data and model proposed in this ACL 2023 paper: [Trillion Dollar Words: A New Financial Dataset, Task & Market Analysis](https://arxiv.org/abs/2305.07972).
 
 > [!NOTE]  
-> I am not the author of that paper nor am I affiliated with the authors of the paper. This package was developed as a by-product of me workign with the data and model in Julia.
+> I am not the author of that paper nor am I affiliated with the authors of the paper. This package was developed as a by-product of me working with the data and model in Julia.
 
 ## Install
 
