@@ -1,16 +1,19 @@
+using Base.Iterators: partition
 using CSV
 using CUDA
 using DataFrames
 using Transformers
 using TrillionDollarWords
 
-# Paths:
+# Path for intermediate activations:
 out_dir = "dev/data/activations/intermediate"
-ispath(out_dir) || mkpath(out_dir)
-if isdir("dev/data/activations/merged")
-    df_activations = CSV.read("dev/data/activations/merged/activations.csv")
-    last_saved = maximum(df_activations.sentence_id)
+if ispath(out_dir)
+    sentence_ids = readdir(out_dir) .|>
+                   x -> split(replace(x, ".csv" => ""), ":")[2] .|>
+                        x -> parse(Int, x)
+    last_saved = maximum(sentence_ids)
 else
+    mkpath(out_dir)
     last_saved = 0
 end
 
@@ -37,14 +40,11 @@ end
 
 # Merge:
 @info "Merging activations..."
+merge_dir = "dev/data/activations/merged"
 df_activations = []
 for x in readdir(out_dir)[contains.(readdir(out_dir), ".csv")]
     push!(df_activations, CSV.read(joinpath(out_dir, x), DataFrame))
 end
 df_activations = vcat(df_activations...) |>
     x -> sort!(x, [:sentence_id, :layer, :activation_id])
-CSV.write("dev/data/activations/activations.csv", df_activations)
-
-queries = df[1:n,:]
-emb = @time layerwise_activations(mod, queries)
-CSV.write("dev/data/activations/activations.csv", emb)
+CSV.write("$merge_dir/activations.csv", df_activations)

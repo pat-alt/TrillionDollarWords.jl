@@ -7,12 +7,15 @@ using TrillionDollarWords
 mod = load_model(; load_head=false, output_hidden_states=true)
 df = load_all_sentences()
 
+# Path for intermediate activations:
 out_dir = "dev/data/activations/intermediate"
-ispath(out_dir) || mkpath(out_dir)
-if isdir("dev/data/activations/merged")
-    df_activations = CSV.read("dev/data/activations/merged/activations.csv")
-    last_saved = maximum(df_activations.sentence_id)
-else
+if ispath(out_dir)
+    sentence_ids = readdir(out_dir) .|> 
+        x -> split(replace(x, ".csv" => ""), ":")[2] .|> 
+        x -> parse(Int, x) 
+    last_saved = maximum(sentence_ids)
+else 
+    mkpath(out_dir)
     last_saved = 0
 end
 
@@ -33,10 +36,13 @@ for (i, chunk) in enumerate(partition(1:n, n_per_chunk))
 end
 
 # Merge:
+@info "Merging activations..."
+merge_dir = "dev/data/activations/merged"
+ispath(merge_dir) || mkpath(merge_dir)
 df_activations = []
 for x in readdir(out_dir)[contains.(readdir(out_dir), ".csv")]
     push!(df_activations, CSV.read(joinpath(out_dir, x), DataFrame))
 end
 df_activations = vcat(df_activations...) |>
     x -> sort!(x, [:sentence_id, :layer, :activation_id]) 
-CSV.write("dev/data/activations/merged/activations.csv", df_activations)
+CSV.write("$merge_dir/activations.csv", df_activations)
