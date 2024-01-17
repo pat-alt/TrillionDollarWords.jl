@@ -4,7 +4,7 @@ using DataFrames
 using Transformers
 using TrillionDollarWords
 
-isdir("dev/data/activations") || mkdir("dev/data/activations")
+ispath("dev/data/activations") || mkpath("dev/data/activations")
 
 # GPU:
 @info "CUDA is functional: $(CUDA.functional())"
