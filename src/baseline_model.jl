@@ -20,7 +20,11 @@ Computes a forward pass of the model on the given queries and returns either the
 
 Computes a forward pass of the model on the given queries and returns the embeddings.
 """
-get_embeddings(mod::BaselineModel, queries::Vector{String}) = get_embeddings(mod.mod, Transformers.encode(mod.tkr, queries))
+function get_embeddings(mod::BaselineModel, queries::Vector{String})
+    tokens = Transformers.encode(mod.tkr, queries) |> Transformers.todevice
+    @info "Tokens type: $(typeof(tokens))."
+    get_embeddings(mod.mod, tokens)
+end
 
 """
     (mod::BaselineModel)(atomic_model::HGFRobertaModel, queries::Vector{String})
@@ -29,7 +33,6 @@ Computes a forward pass of the model on the given queries and returns the embedd
 """
 function (mod::BaselineModel)(atomic_model::HGFRobertaModel, queries::Vector{String})
     tokens = Transformers.encode(mod.tkr, queries) |> Transformers.todevice
-    @info "Tokens: $(typeof(tokens))"
     atomic_model = Transformers.todevice(atomic_model)
     embeddings = atomic_model(tokens)
     return embeddings
