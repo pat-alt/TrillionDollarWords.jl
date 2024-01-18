@@ -3,6 +3,8 @@ import Transformers
 using TrillionDollarWords
 using Test
 
+ENV["JULIA_SSL_NO_VERIFY_HOSTS"] = "github.com"
+
 @testset "TrillionDollarWords.jl" begin
     @testset "Load data" begin
         include("load_data.jl")
