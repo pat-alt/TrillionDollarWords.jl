@@ -31,5 +31,11 @@ for layer in 1:n_layers
     layer_dir = layer_dirs[layer]
     artifact_id = artifact_from_directory(layer_dir)
     release = upload_to_release(artifact_id; tag="activations_$(today())", name="activations_layer_$layer.tar.gz")
-    add_artifact!("Artifacts.toml", "activations_layer_$layer", release; force=true)
+    add_artifact!(
+        "Artifacts.toml", 
+        "activations_layer_$layer", 
+        release; 
+        force=true,
+        lazy=true
+    )
 end
