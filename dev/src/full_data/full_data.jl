@@ -31,7 +31,7 @@ include("market_data.jl")
 
 # Merge:
 df = innerjoin(df, df_combined, on=:date) |>
-    x -> sort!(x, [:date, :event_type]) 
+    x -> sort!(x, [:sentence_id, :doc_id, :date, :event_type])
 
 # Save:
 CSV.write("$clean_dir/all_data.csv", df)

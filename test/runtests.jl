@@ -12,4 +12,8 @@ using Test
         include("load_model.jl")
     end
 
+    @testset "Probing" begin
+        include("probe.jl")
+    end
+
 end
