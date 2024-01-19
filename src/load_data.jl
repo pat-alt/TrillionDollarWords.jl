@@ -15,7 +15,8 @@ Load the dataset with all sentences from the artifact. This is the complete data
 - The `score` column is the softmax probability of the label.
 - The `speaker` column is the speaker of the sentence (if applicable).
 """
-load_all_sentences() = CSV.read(joinpath(artifact"clean_data","all_sentences.csv"), DataFrame)
+load_all_sentences() =
+    CSV.read(joinpath(artifact"clean_data", "all_sentences.csv"), DataFrame)
 
 """
     load_training_sentences()
@@ -31,7 +32,8 @@ Load the dataset with training sentences from the artifact. This is a combined d
 - The `split` column indicates if the sentence is in the train or test set.
 
 """
-load_training_sentences() = CSV.read(joinpath(artifact"clean_data","training_sentences.csv"), DataFrame)
+load_training_sentences() =
+    CSV.read(joinpath(artifact"clean_data", "training_sentences.csv"), DataFrame)
 
 """
     load_cpi_data()
@@ -42,7 +44,7 @@ Load the CPI data from the artifact. This is the CPI data used in the paper.
 - The `value` columns is the value of the market indicator (CPI, PPI, or UST).
 - The `indicator` column is the market indicator (CPI, PPI, or UST).
 """
-load_cpi_data() = CSV.read(joinpath(artifact"clean_data","market_data/cpi.csv"), DataFrame)
+load_cpi_data() = CSV.read(joinpath(artifact"clean_data", "market_data/cpi.csv"), DataFrame)
 
 """
     load_ppi_data()
@@ -77,7 +79,8 @@ Load the combined market data from the artifact. This dataset combines the CPI, 
 - The `indicator` column is the market indicator (CPI, PPI, or UST).
 - The `maturity` column is the maturity of the UST (if applicable).
 """
-load_market_data() = CSV.read(joinpath(artifact"clean_data", "market_data/combined.csv"), DataFrame)
+load_market_data() =
+    CSV.read(joinpath(artifact"clean_data", "market_data/combined.csv"), DataFrame)
 
 """
     load_all_data()

@@ -14,8 +14,16 @@ end
 @testset "Load training sentences" begin
     df = load_training_sentences()
     # Number of observations as in paper:
-    @test subset(df, :seed => x -> x .== first(unique(df.seed)), :sentence_splitting => x -> x .== false) |> x -> size(x, 1) == 2379
-    @test subset(df, :seed => x -> x .== first(unique(df.seed)), :sentence_splitting => x -> x .== true) |> x -> size(x, 1) == 2480
+    @test subset(
+        df,
+        :seed => x -> x .== first(unique(df.seed)),
+        :sentence_splitting => x -> x .== false,
+    ) |> x -> size(x, 1) == 2379
+    @test subset(
+        df,
+        :seed => x -> x .== first(unique(df.seed)),
+        :sentence_splitting => x -> x .== true,
+    ) |> x -> size(x, 1) == 2480
     @test typeof(df) == DataFrame
 end
 
@@ -37,8 +45,31 @@ end
 @testset "Load all data" begin
     df = load_all_data()
     # Number of observations as in paper:
-    @test size(subset(df, :event_type => x -> x .== "meeting minutes", :indicator => x -> x .== "PPI"), 1) == n_mm
-    @test size(subset(df, :event_type => x -> x .== "press conference", :indicator => x -> x .== "CPI"), 1) == n_pc
-    @test size(subset(df, :event_type => x -> x .== "speech", :indicator => x -> x .== "UST", :maturity => x -> x .== "30 Yr", skipmissing=true), 1) == n_speech
+    @test size(
+        subset(
+            df,
+            :event_type => x -> x .== "meeting minutes",
+            :indicator => x -> x .== "PPI",
+        ),
+        1,
+    ) == n_mm
+    @test size(
+        subset(
+            df,
+            :event_type => x -> x .== "press conference",
+            :indicator => x -> x .== "CPI",
+        ),
+        1,
+    ) == n_pc
+    @test size(
+        subset(
+            df,
+            :event_type => x -> x .== "speech",
+            :indicator => x -> x .== "UST",
+            :maturity => x -> x .== "30 Yr",
+            skipmissing = true,
+        ),
+        1,
+    ) == n_speech
     @test typeof(df) == DataFrame
 end

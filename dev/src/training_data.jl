@@ -1,7 +1,8 @@
 # Get data from the web and save it to a file
 include("get_data.jl")
 
-train_data_root = joinpath(raw_data_root, "fomc-hawkish-dovish-main/training_data/test-and-training/")
+train_data_root =
+    joinpath(raw_data_root, "fomc-hawkish-dovish-main/training_data/test-and-training/")
 train_dir = joinpath(train_data_root, "training_data")
 test_dir = joinpath(train_data_root, "test_data")
 
@@ -14,11 +15,13 @@ for x in readdir(train_dir)
     _df = DataFrame(_m[2:end, :], _m[1, :])
     _df[!, "seed"] .= extract_digits(x)
     _df[!, "sentence_splitting"] .= contains(x, "split")
-    _df[!, "event_type"] .= contains(x, "-sp-") ? "speech" : contains(x, "-pc-") ? "press conference" : "meeting minutes"
+    _df[!, "event_type"] .=
+        contains(x, "-sp-") ? "speech" :
+        contains(x, "-pc-") ? "press conference" : "meeting minutes"
     push!(df_train, _df)
 end
-df_train = reduce(vcat, df_train, cols=:union)
-df_train[!,"split"] .= "train"
+df_train = reduce(vcat, df_train, cols = :union)
+df_train[!, "split"] .= "train"
 
 # Test data:
 df_test = Vector{DataFrame}()
@@ -29,11 +32,13 @@ for x in readdir(test_dir)
     _df = DataFrame(_m[2:end, :], _m[1, :])
     _df[!, "seed"] .= extract_digits(x)
     _df[!, "sentence_splitting"] .= contains(x, "split")
-    _df[!, "event_type"] .= contains(x, "-sp-") ? "speech" : contains(x, "-pc-") ? "press conference" : "meeting minutes"
+    _df[!, "event_type"] .=
+        contains(x, "-sp-") ? "speech" :
+        contains(x, "-pc-") ? "press conference" : "meeting minutes"
     push!(df_test, _df)
 end
-df_test = reduce(vcat, df_test, cols=:union)
-df_test[!,"split"] .= "test"
+df_test = reduce(vcat, df_test, cols = :union)
+df_test[!, "split"] .= "test"
 
 # Merge:
 df = vcat(df_train, df_test)

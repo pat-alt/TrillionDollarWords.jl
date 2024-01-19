@@ -8,7 +8,7 @@ include("pre_process_speech.jl")
 include("pre_process_pc.jl")
 
 # Merge:
-df = vcat(df_mm, df_speech, df_pc, cols=:union)
+df = vcat(df_mm, df_speech, df_pc, cols = :union)
 df.date = Dates.Date.(df.date, "yyyymmdd")
 
 # Transform label column
@@ -30,9 +30,9 @@ ALL_EVENT_TIMES = unique(select(df, :date))
 include("market_data.jl")
 
 # Merge:
-df = innerjoin(df, df_combined, on=:date) |>
+df =
+    innerjoin(df, df_combined, on = :date) |>
     x -> sort!(x, [:sentence_id, :doc_id, :date, :event_type])
 
 # Save:
 CSV.write("$clean_dir/all_data.csv", df)
-

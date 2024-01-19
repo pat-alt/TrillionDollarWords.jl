@@ -2,14 +2,15 @@ df = load_all_sentences()
 n = 2
 queries = df[1:n, :]
 mod_cls = load_model()
-mod = load_model(; load_head=false)
+mod = load_model(; load_head = false)
 
 @testset "Model" begin
 
     @testset "with head" begin
         @test typeof(mod_cls) == BaselineModel
         @test typeof(mod_cls.tkr) <: Transformers.TextEncoders.GPT2TextEncoder
-        @test typeof(mod_cls.mod) <: Transformers.HuggingFace.HGFRobertaForSequenceClassification
+        @test typeof(mod_cls.mod) <:
+              Transformers.HuggingFace.HGFRobertaForSequenceClassification
         @test hasfield(typeof(mod_cls.mod), :cls)
     end
 
@@ -23,7 +24,7 @@ mod = load_model(; load_head=false)
 end
 
 @testset "Outputs" begin
-    
+
     @testset "Simple forward pass" begin
         emb = mod(queries.sentence)
         @test haskey(emb, :pooled)
@@ -33,7 +34,7 @@ end
     end
 
     @testset "Activations" begin
-        
+
         @testset "To array" begin
             A = layerwise_activations(mod, queries.sentence)
             @test size(A, 2) == n

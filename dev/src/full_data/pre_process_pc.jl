@@ -14,16 +14,19 @@ df[!, "YYYYMMDD"] .= extract_digits.(df.Url)
 labeled_dir = joinpath(raw_data_dir, "filtered_data/press_conference_labeled/")
 df_labeled = []
 for x in readdir(labeled_dir)
-    _df = CSV.read(joinpath(labeled_dir, x), DataFrame, drop=[1])
+    _df = CSV.read(joinpath(labeled_dir, x), DataFrame, drop = [1])
     _df[!, "YYYYMMDD"] .= extract_digits(x)
     push!(df_labeled, _df)
 end
 df_labeled = vcat(df_labeled...)
 
 # Merge:
-df_pc = innerjoin(df, df_labeled, on=:YYYYMMDD) |>
-    x -> transform!(groupby(x, :Url), groupindices => :doc_id) |>
-    x -> select(x, [:doc_id, :YYYYMMDD, :EventType, :label, :sentence, :score]) |>
-    x -> rename!(x, :YYYYMMDD => :date, :EventType => :event_type) 
+df_pc =
+    innerjoin(df, df_labeled, on = :YYYYMMDD) |>
+    x ->
+        transform!(groupby(x, :Url), groupindices => :doc_id) |>
+        x ->
+            select(x, [:doc_id, :YYYYMMDD, :EventType, :label, :sentence, :score]) |>
+            x -> rename!(x, :YYYYMMDD => :date, :EventType => :event_type)
 
 df_pc.event_type .= "press conference"
