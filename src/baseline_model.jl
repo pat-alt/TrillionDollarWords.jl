@@ -1,5 +1,6 @@
 using Transformers.TextEncoders: GPT2TextEncoder
-using Transformers.HuggingFace: HGFRobertaModel, HGFRobertaForSequenceClassification, HGFConfig
+using Transformers.HuggingFace:
+    HGFRobertaModel, HGFRobertaForSequenceClassification, HGFConfig
 
 "Struct for the baseline model (i.e. the model presented in the paper)."
 struct BaselineModel
@@ -49,7 +50,10 @@ get_embeddings(atomic_model::HGFRobertaModel, tokens::NamedTuple) = atomic_model
 
 Computes a forward pass of the model on the given queries and returns the logits.
 """
-function (mod::BaselineModel)(atomic_model::HGFRobertaForSequenceClassification, queries::Vector{String})
+function (mod::BaselineModel)(
+    atomic_model::HGFRobertaForSequenceClassification,
+    queries::Vector{String},
+)
     tokens = Transformers.encode(mod.tkr, queries) |> Transformers.todevice
     atomic_model = Transformers.todevice(atomic_model)
     embeddings = atomic_model.model(tokens)
@@ -62,7 +66,8 @@ end
 
 Extends the `embeddings` function to `HGFRobertaForSequenceClassification`.
 """
-get_embeddings(atomic_model::HGFRobertaForSequenceClassification, tokens::NamedTuple) = atomic_model.model(tokens)
+get_embeddings(atomic_model::HGFRobertaForSequenceClassification, tokens::NamedTuple) =
+    atomic_model.model(tokens)
 
 """
     laywerwise_activations(mod::BaselineModel, queries::Vector{String})
@@ -93,15 +98,24 @@ function layerwise_activations(mod::BaselineModel, queries::DataFrame)
     A = layerwise_activations(mod, query_sentences)
     if isa(A, Vector{<:AbstractArray})
         df = []
-        for j in 1:length(A)
-            _df = DataFrame(sentence_id=queries.sentence_id, activations=[A[j][:, i] for i in 1:size(A[j], 2)], layer=j)
+        for j = 1:length(A)
+            _df = DataFrame(
+                sentence_id = queries.sentence_id,
+                activations = [A[j][:, i] for i = 1:size(A[j], 2)],
+                layer = j,
+            )
             push!(df, _df)
         end
         df = vcat(df...)
     else
-        df = DataFrame(sentence_id=queries.sentence_id, activations=[A[:, i] for i in 1:size(A, 2)], layer=mod.cfg.num_hidden_layers)
+        df = DataFrame(
+            sentence_id = queries.sentence_id,
+            activations = [A[:, i] for i = 1:size(A, 2)],
+            layer = mod.cfg.num_hidden_layers,
+        )
     end
-    df = flatten(df, :activations) |>
+    df =
+        flatten(df, :activations) |>
         x -> transform(groupby(x, [:sentence_id, :layer]), eachindex => :activation_id)
     return df
 end
@@ -111,14 +125,14 @@ end
 
 Loads the model presented in the paper from HuggingFace. If `load_head` is `true`, the model is loaded with the head (i.e. the final layer) for classification. If `load_head` is `false`, the model is loaded without the head. The latter is useful for fine-tuning the model on a different task or in case the classification head is not needed. Accepts any additional keyword arguments that are accepted by `Transformers.HuggingFace.HGFConfig`.
 """
-function load_model(; load_head=true, kwrgs...)
+function load_model(; load_head = true, kwrgs...)
     tkr = Transformers.load_tokenizer("gtfintechlab/FOMC-RoBERTa")
     model_name = "gtfintechlab/FOMC-RoBERTa"
     cfg = Transformers.HuggingFace.HGFConfig(Transformers.load_config(model_name); kwrgs...)
     if load_head
-        mod = Transformers.load_model(model_name, "ForSequenceClassification"; config=cfg)
+        mod = Transformers.load_model(model_name, "ForSequenceClassification"; config = cfg)
     else
-        mod = Transformers.load_model(model_name; config=cfg)
+        mod = Transformers.load_model(model_name; config = cfg)
     end
     return BaselineModel(tkr, mod, cfg)
 end
