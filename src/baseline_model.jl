@@ -83,8 +83,8 @@ Computes a forward pass of the model on the given queries and returns the layerw
 """
 function layerwise_activations(mod::BaselineModel, queries::Vector{String})
     embeddings = get_embeddings(mod, queries)
-    if typeof(mod.mod) == HGFRobertaForSequenceClassification
-        output = embeddings.hidden_state
+    if typeof(mod.mod) <: HGFRobertaForSequenceClassification
+        output = embeddings.hidden_state[:,:]
     else 
         pooler = Transformers.HuggingFace.FirstTokenPooler()
         if haskey(embeddings, :outputs)

@@ -50,7 +50,6 @@ For our own research, we have been interested in probing the model. This involve
 julia> using LazyArtifacts
 
 julia> artifact"activations_layer_24"
-"$HOME/.julia/artifacts/1785c2c64e603af5e6b79761150b1cc15d03f525"
 ```
 
 We have found that despite the small sample size, the RoBERTa model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. The chart below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work [@alain2018understanding], we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models.

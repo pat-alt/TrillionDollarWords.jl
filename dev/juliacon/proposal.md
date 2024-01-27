@@ -57,18 +57,6 @@ We hope that this small package may be useful to members of the Julia community 
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+Alain, Guillaume, and Yoshua Bengio. 2018. “Understanding Intermediate Layers Using Linear Classifier Probes.” 
 
-<div id="ref-alain2018understanding" class="csl-entry">
-
-Alain, Guillaume, and Yoshua Bengio. 2018. “Understanding Intermediate Layers Using Linear Classifier Probes.” <https://arxiv.org/abs/1610.01644>.
-
-</div>
-
-<div id="ref-shah2023trillion" class="csl-entry">
-
-Shah, Agam, Suvan Paturi, and Sudheer Chava. 2023. “Trillion Dollar Words: A New Financial Dataset, Task & Market Analysis.” <https://arxiv.org/abs/2305.07972>.
-
-</div>
-
-</div>
+Shah, Agam, Suvan Paturi, and Sudheer Chava. 2023. “Trillion Dollar Words: A New Financial Dataset, Task & Market Analysis.” 
