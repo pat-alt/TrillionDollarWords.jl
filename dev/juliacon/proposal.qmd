@@ -12,7 +12,7 @@ format:
 
 ## Description
 
-In the age of forward guidance, central bankers spend a great deal of time thinking about how their communications are perceived by markets. What if there was a way to predict the impact of communications on financial markets directly from text? @shah2023trillion attempt to do just that in their [ACL 2023 paper](https://arxiv.org/abs/2305.07972) (which the presenter and author of this package is not affiliated with).
+In the age of forward guidance, central bankers spend a great deal of time thinking about how their communications are perceived by markets. What if there was a way to predict the impact of communications on financial markets directly from text? @shah2023trillion attempt to do just that in their [ACL 2023 paper](https://arxiv.org/abs/2305.07972) (which the author of this package is not affiliated with).
 
 ### Background
 
@@ -40,7 +40,7 @@ In addition to the sentences, market data about price inflation and the US Treas
 
 ### Loading the Model
 
-The model can be loaded with or without the classifier head. Under the hood, we use [Transformers.jl](https://github.com/chengchingwen/Transformers.jl) to retrieve the model from [HuggingFace](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves). Any keyword arguments accepted by `Transformers.HuggingFace.HGFConfig` can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used: `load_model(; load_head=false, output_hidden_states=true)`.
+The model can be loaded with or without the classifier head. Under the hood, we use [Transformers.jl](https://github.com/chengchingwen/Transformers.jl) to retrieve the model from HuggingFace. Any keyword arguments accepted by `Transformers.HuggingFace.HGFConfig` can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used: `load_model(; load_head=false, output_hidden_states=true)`.
 
 ### Model Inference
 
@@ -53,13 +53,13 @@ julia> artifact"activations_layer_24"
 "$HOME/.julia/artifacts/1785c2c64e603af5e6b79761150b1cc15d03f525"
 ```
 
-In our research, we have found that despite the small size of the training dataset, the RoBERTa model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. The chart below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work [@alain2018understanding], we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at leasr on par with baseline autoregressive models.
+We have found that despite the small sample size, the RoBERTa model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. The chart below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work [@alain2018understanding], we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at least on par with baseline autoregressive models.
 
 ![](rmse_pca_128.png)
 
 ### Intended Purpose
 
-We hope that this small package may be useful to members of the Julia community who are interested in the interplay between Economics, Finance and Artificial Intelligence. It should, for example, be straight-forward to use this package in combination with [Transformers.jl](https://github.com/chengchingwen/Transformers.jl) to fine-tune additional models on the classification task or other tasks of interest. Any contributions are very much welcome. 
+We hope that this small package may be useful to members of the Julia community who are interested in the interplay between Economics, Finance and Artificial Intelligence. It should, for example, be straight-forward to use this package in combination with Transformers.jl to fine-tune additional models on the classification task or other tasks of interest. Any contributions are very much welcome. 
 
 ## References
 
