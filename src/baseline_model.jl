@@ -66,12 +66,14 @@ end
 
 Extends the `embeddings` function to `HGFRobertaForSequenceClassification`. Performs a forward pass through the model and returns the embeddings. Then performs a forward pass through the classification head and returns the activations going into the final linear layer.
 """
-function get_embeddings(atomic_model::HGFRobertaForSequenceClassification, tokens::NamedTuple)
+function get_embeddings(
+    atomic_model::HGFRobertaForSequenceClassification,
+    tokens::NamedTuple,
+)
     clf = atomic_model.cls
     b = atomic_model.model(tokens)
     # Perform forward pass through classification head:
-    b = clf.layer.layers[1](b).hidden_state |>
-        x -> clf.layer.layers[2](x)
+    b = clf.layer.layers[1](b).hidden_state |> x -> clf.layer.layers[2](x)
     return b
 end
 
@@ -84,8 +86,8 @@ Computes a forward pass of the model on the given queries and returns the layerw
 function layerwise_activations(mod::BaselineModel, queries::Vector{String})
     embeddings = get_embeddings(mod, queries)
     if typeof(mod.mod) <: HGFRobertaForSequenceClassification
-        output = embeddings.hidden_state[:,:]
-    else 
+        output = embeddings.hidden_state[:, :]
+    else
         pooler = Transformers.HuggingFace.FirstTokenPooler()
         if haskey(embeddings, :outputs)
             output = [pooler(x.hidden_state) for x in embeddings.outputs]
