@@ -20,7 +20,7 @@ The authors of the paper have collected and preprocessed a corpus of around 40,0
 
 ### Data
 
-While the authors of the paper did publish their data, much of it is unfortunately scattered across CSV and Excel files stored in a public GitHub repo. We have collected and merged that data, yielding a combined dataset with indexed sentences and additional metadata that may useful for downstream tasks. 
+While the authors of the paper did publish their data, much of it is unfortunately scattered across CSV and Excel files stored in a public GitHub repo. We have collected and merged that data, yielding a combined dataset with indexed sentences and additional metadata that may be useful for downstream tasks. 
 
 ```julia
 julia> using TrillionDollarWords
@@ -36,15 +36,15 @@ julia> load_all_sentences() |> names
  "speaker"
 ```
 
-In addition to the sentences, market data about price inflation and the US Treasury yield curve can also easily be loaded. All datasets are loaded as `DataFrame`s and share common keys that make it possible to join them. Alternatively, a complete dataset combining the corpus of sentences with market data can also be loaded with `load_all_data()`.
+In addition to the sentences, market data about price inflation and the US Treasury yield curve can also be loaded. All datasets are loaded as `DataFrame`s and share common keys that make it possible to join them. Alternatively, a complete dataset combining the corpus of sentences with market data can also be loaded with `load_all_data()`.
 
 ### Loading the Model
 
-The model can be loaded with or without the classifier head. Under the hood, we use [Transformers.jl](https://github.com/chengchingwen/Transformers.jl) to retrieve the model from [HuggingFace](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves). Any keyword arguments accepted by `Transformers.HuggingFace.HGFConfig` can also be passed. To load the model without the classifier head and enable access to layer-wise activations, the following command can be used: `load_model(; load_head=false, output_hidden_states=true)`.
+The model can be loaded with or without the classifier head. Under the hood, we use [Transformers.jl](https://github.com/chengchingwen/Transformers.jl) to retrieve the model from [HuggingFace](https://huggingface.co/gtfintechlab/FOMC-RoBERTa?text=A+very+hawkish+stance+excerted+by+the+doves). Any keyword arguments accepted by `Transformers.HuggingFace.HGFConfig` can also be passed. For example, to load the model without the classifier head and enable access to layer-wise activations, the following command can be used: `load_model(; load_head=false, output_hidden_states=true)`.
 
 ### Model Inference
 
-For our own research, we have been interest in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest [@alain2018understanding]. To do this, we first had run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. The package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as [artifacts](https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17). To download the last-layer activations in interactive Julia session, for example, users can proceed as follows:
+For our own research, we have been interested in probing the model. This involves using linear models to estimate the relationship between layer-wise transformer embeddings and some outcome variable of interest [@alain2018understanding]. To do this, we first had to run a single forward pass for each sentence through the RoBERTa model and store the layerwise emeddings. The package ships with functionality for doing just that, but to save others valuable GPU hours we have archived activations of the hidden state on the first entity token for each layer as [artifacts](https://github.com/pat-alt/TrillionDollarWords.jl/releases/tag/activations_2024-01-17). To download the last-layer activations in an interactive Julia session, for example, users can proceed as follows:
 
 ```julia
 julia> using LazyArtifacts
@@ -53,13 +53,13 @@ julia> artifact"activations_layer_24"
 "$HOME/.julia/artifacts/1785c2c64e603af5e6b79761150b1cc15d03f525"
 ```
 
-In upcoming work, we have found that despite the small size of the training dataset, the RoBERTa model appares to have distilled useful representations for downstream tasks that it was not explicitly trained for. The chart below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work [@alain2018understanding], we find that performance typically improves for layers closer to the final output layer of the transformer model.
+In our research, we have found that despite the small size of the training dataset, the RoBERTa model appears to have distilled useful representations for downstream tasks that it was not explicitly trained for. The chart below shows the average out-of-sample root mean squared error for predicting various market indicators from layer activations. Consistent with findings in related work [@alain2018understanding], we find that performance typically improves for layers closer to the final output layer of the transformer model. The measured performance is at leasr on par with baseline autoregressive models.
 
 ![](rmse_pca_128.png)
 
 ### Intended Purpose
 
-We hope that this small package may be useful to members of the Julia community who are interest in the interplay Economics, Finance and Artificial Intelligence. It should, for example, be straight-forward to use this package in combination with [Transformers.jl](https://github.com/chengchingwen/Transformers.jl) to fine-tune additional models on the classification task or other tasks of interest. Any contributions are very much welcome. 
+We hope that this small package may be useful to members of the Julia community who are interested in the interplay between Economics, Finance and Artificial Intelligence. It should, for example, be straight-forward to use this package in combination with [Transformers.jl](https://github.com/chengchingwen/Transformers.jl) to fine-tune additional models on the classification task or other tasks of interest. Any contributions are very much welcome. 
 
 ## References
 
