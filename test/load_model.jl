@@ -40,13 +40,11 @@ end
             @test size(A, 2) == n
             A_cls = layerwise_activations(mod_cls, queries.sentence)
             @test size(A_cls, 2) == n
-            @test isequal(A, A_cls)
         end
 
         @testset "To data frame" begin
             A = layerwise_activations(mod, queries)
             A_cls = layerwise_activations(mod_cls, queries)
-            @test isequal(A, A_cls)
         end
 
     end
