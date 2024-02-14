@@ -11,6 +11,7 @@ LazyArtifacts = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
 Transformers = "21ca0261-441d-5938-ace7-c90938fde4d4"
 
 [compat]
+Arrow = "2.7.0"
 CSV = "0.10"
 DataFrames = "1.6"
 Transformers = "0.2"
