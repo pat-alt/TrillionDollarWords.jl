@@ -9,7 +9,14 @@ This is a small package that facilitates working with the data and model propose
 
 ## Install
 
-The package is not yet registered. In the meantime, you can install it from GitHub:
+You can install the package from Julia’s general registry as follows:
+
+``` julia
+using Pkg
+Pkg.add(url="TrillionDollarWords.jl")
+```
+
+To install the development version, use the following command:
 
 ``` julia
 using Pkg
