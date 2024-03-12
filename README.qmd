@@ -36,7 +36,7 @@ You can install the package from Julia's general registry as follows:
 
 ``` julia
 using Pkg
-Pkg.add(url="TrillionDollarWords.jl")
+Pkg.add("TrillionDollarWords")
 ```
 
 To install the development version, use the following command:
