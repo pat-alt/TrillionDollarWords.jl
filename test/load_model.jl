@@ -8,7 +8,8 @@ mod = load_model(; load_head = false)
 
     @testset "with head" begin
         @test typeof(mod_cls) == BaselineModel
-        @test typeof(mod_cls.tkr) <: Transformers.TextEncoders.AbstractTransformerTextEncoder
+        @test typeof(mod_cls.tkr) <:
+              Transformers.TextEncoders.AbstractTransformerTextEncoder
         @test typeof(mod_cls.mod) <:
               Transformers.HuggingFace.HGFRobertaForSequenceClassification
         @test hasfield(typeof(mod_cls.mod), :cls)
