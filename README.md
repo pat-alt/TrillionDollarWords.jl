@@ -115,7 +115,7 @@ The model can be loaded with or without the classifier head (below without the h
 load_model(; load_head=false, output_hidden_states=true) |> show
 ```
 
-    BaselineModel(GPT2TextEncoder(
+    BaselineModel(AbstractTransformerTextEncoder(
     ├─ TextTokenizer(MatchTokenization(CodeNormalizer(BPETokenization(GPT2Tokenization, bpe = CachedBPE(BPE(50000 merges))), codemap = CodeMap{UInt8 => UInt16}(3 code-ranges)), 5 patterns)),
     ├─ vocab = Vocab{String, SizedArray}(size = 50265, unk = <unk>, unki = 4),
     ├─ codemap = CodeMap{UInt8 => UInt16}(3 code-ranges),
