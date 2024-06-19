@@ -1,10 +1,10 @@
-using Transformers.TextEncoders: GPT2TextEncoder
+using Transformers.TextEncoders: AbstractTransformerTextEncoder
 using Transformers.HuggingFace:
     HGFRobertaModel, HGFRobertaForSequenceClassification, HGFConfig
 
 "Struct for the baseline model (i.e. the model presented in the paper)."
 struct BaselineModel
-    tkr::GPT2TextEncoder
+    tkr::AbstractTransformerTextEncoder
     mod::Union{HGFRobertaModel,HGFRobertaForSequenceClassification}
     cfg::HGFConfig
 end
